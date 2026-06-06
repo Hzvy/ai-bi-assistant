@@ -1,0 +1,5 @@
+username = "Hzvy"
+password = "123456"
+access_rights = "admin"
+access_level = 3
+department = "技术部"

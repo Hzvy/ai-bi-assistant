@@ -1,0 +1,105 @@
+# 数据字典
+
+## sales 表 (销售表)
+
+| 字段名 | 类型 | 说明 | 备注 |
+|--------|------|------|------|
+| id | INT | 销售记录ID | 主键 |
+| date | DATE | 销售日期 | 格式: YYYY-MM-DD |
+| product_id | INT | 产品ID | 外键 |
+| product_name | VARCHAR | 产品名称 | 不为空 |
+| category | VARCHAR | 产品类别 | 如: 电子产品、日用品等 |
+| quantity | INT | 销售数量 | 必须 > 0 |
+| amount | DECIMAL | 销售金额 | 精确到分 |
+| region | VARCHAR | 销售地区 | 如: 华东、华南等 |
+| department | VARCHAR | 销售部门 | 如: 销售一部、销售二部 |
+| salesperson | VARCHAR | 销售员名称 | 负责销售的员工 |
+
+## customers 表 (客户表)
+
+| 字段名 | 类型 | 说明 | 备注 |
+|--------|------|------|------|
+| id | INT | 客户ID | 主键 |
+| name | VARCHAR | 客户名称 | 不为空 |
+| contact | VARCHAR | 联系方式 | 手机或邮箱 |
+| region | VARCHAR | 客户所在地区 | 便于分析 |
+| industry | VARCHAR | 行业 | 客户所在行业 |
+| amount | DECIMAL | 累计消费金额 | 用于RFM分析 |
+| create_date | DATE | 创建日期 | 客户创建时间 |
+
+## products 表 (产品表)
+
+| 字段名 | 类型 | 说明 | 备注 |
+|--------|------|------|------|
+| id | INT | 产品ID | 主键 |
+| name | VARCHAR | 产品名称 | 不为空 |
+| category | VARCHAR | 产品类别 | 分类 |
+| price | DECIMAL | 单价 | 销售价格 |
+| cost | DECIMAL | 成本 | 产品成本 |
+| stock | INT | 库存数量 | 当前库存 |
+
+## 常用查询示例
+
+### 1. 按部门统计销售额
+```sql
+SELECT department, SUM(amount) as total_amount 
+FROM sales 
+GROUP BY department;
+```
+
+### 2. 按地区统计销售量
+```sql
+SELECT region, SUM(quantity) as total_quantity 
+FROM sales 
+GROUP BY region 
+ORDER BY total_quantity DESC;
+```
+
+### 3. 产品类别销售占比
+```sql
+SELECT category, SUM(amount) as amount 
+FROM sales 
+GROUP BY category;
+```
+
+### 4. 月度销售趋势
+```sql
+SELECT DATE_FORMAT(date, '%Y-%m') as month, SUM(amount) as amount 
+FROM sales 
+GROUP BY DATE_FORMAT(date, '%Y-%m') 
+ORDER BY month;
+```
+
+### 5. 销售员排名
+```sql
+SELECT salesperson, SUM(amount) as total_amount 
+FROM sales 
+GROUP BY salesperson 
+ORDER BY total_amount DESC 
+LIMIT 10;
+```
+
+## 字段值示例
+
+### region (地区)
+- 华东地区
+- 华北地区
+- 华南地区
+- 西北地区
+- 西南地区
+- 东北地区
+
+### category (类别)
+- 电子产品
+- 日用品
+- 食品饮料
+- 服装鞋类
+- 家居家电
+- 书籍音像
+
+### department (部门)
+- 销售一部
+- 销售二部
+- 销售三部
+- 电商部
+- 大客户部
